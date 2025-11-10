@@ -16,7 +16,7 @@ export default function QuizScreen({ showScreen }) {
     if (!difficulty) return;
 
     setLoading(true);
-    fetch(`http://localhost:3001/quiz/random?count=10&difficulty=${difficulty}`)
+    fetch(`https://learnplay-back.onrender.com/quiz/random?count=10&difficulty=${difficulty}`)
       .then((res) => res.json())
       .then((data) => {
         const shuffled = shuffle(data).map((q) => {
