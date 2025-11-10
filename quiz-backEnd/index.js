@@ -4,13 +4,7 @@ import quizRoutes from "./routes/quizRoutes.js";
 
 const app = express();
 
-app.use(cors({
-  origin: [
-    "https://learnplay.vercel.app",
-  ],
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true,
-}));
+app.use(cors());
 
 app.use(express.json());
 
