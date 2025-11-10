@@ -8,7 +8,6 @@ app.use(cors({
   origin: [
     "https://learnplay.vercel.app",
     "https://learnplay-drat3xc7s-santosgabrielfigueiredodos-4989s-projects.vercel.app",
-    "http://localhost:3001"
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
