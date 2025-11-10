@@ -4,24 +4,34 @@ import quizRoutes from "./routes/quizRoutes.js";
 
 const app = express();
 
-// ✅ Middleware global para CORS manual
+// ✅ Libera completamente o CORS para todas as origens
 app.use((req, res, next) => {
-  // 🟢 Permite todas as origens (universal)
-  res.header("Access-Control-Allow-Origin", "*");
-
-  // 🟡 Se quiser permitir apenas o front hospedado na Vercel, use:
-  // res.header("Access-Control-Allow-Origin", "https://learnplay.vercel.app");
-
-  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+  res.header("Access-Control-Allow-Origin", "*"); // permite qualquer origem
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-
-  // ✅ Intercepta requisições OPTIONS (pré-flight)
   if (req.method === "OPTIONS") {
-    return res.sendStatus(204);
+    return res.sendStatus(200);
   }
-
   next();
 });
+
+app.use(cors()); // middleware extra de segurança (com suporte a headers automáticos)
+app.use(express.json());
+
+// ✅ Rota de teste (para verificar se o servidor está ativo)
+app.get("/", (req, res) => {
+  res.json({ message: "Servidor LearnPlay ativo e CORS liberado ✅" });
+});
+
+// ✅ Rotas principais
+app.use("/quiz", quizRoutes);
+
+// ✅ Porta dinâmica exigida pelo Render
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`🚀 Servidor rodando na porta ${PORT}`);
+});
+
 
 // ✅ Middleware express padrão
 app.use(express.json());
