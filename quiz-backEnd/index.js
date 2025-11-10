@@ -2,11 +2,10 @@ import express from "express";
 import cors from "cors";
 import quizRoutes from "./routes/quizRoutes.js";
 
-const cors = require("cors");
 const app = express();
 app.use(express.json());
 app.use(cors({
-  origin: ["https://learnplay.onrender.com/"], 
+  origin: ["https://learnplay-drat3xc7s-santosgabrielfigueiredodos-4989s-projects.vercel.app"], 
   methods: ["GET", "POST", "PUT", "DELETE"],
 }));
 app.use("/quiz", quizRoutes);
