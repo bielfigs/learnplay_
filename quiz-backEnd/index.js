@@ -4,47 +4,37 @@ import quizRoutes from "./routes/quizRoutes.js";
 
 const app = express();
 
-// ✅ Libera completamente o CORS para todas as origens
+// ✅ Middleware de CORS duplo (manual + lib)
+const allowedOrigins = [
+  "https://learnplay.vercel.app",
+  "https://learnplay-drat3xc7s-santosgabrielfigueiredodos-4989s-projects.vercel.app",
+  ];
+
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*"); // permite qualquer origem
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(200);
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
+  } else {
+    res.header("Access-Control-Allow-Origin", "*"); // fallback
   }
+  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  if (req.method === "OPTIONS") return res.sendStatus(200);
   next();
 });
 
-app.use(cors()); // middleware extra de segurança (com suporte a headers automáticos)
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(express.json());
 
-// ✅ Rota de teste (para verificar se o servidor está ativo)
+// ✅ Rota base para testar se o servidor está ativo
 app.get("/", (req, res) => {
-  res.json({ message: "Servidor LearnPlay ativo e CORS liberado ✅" });
+  res.json({ message: "Servidor LearnPlay ativo ✅" });
 });
 
-// ✅ Rotas principais
-app.use("/quiz", quizRoutes);
-
-// ✅ Porta dinâmica exigida pelo Render
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`🚀 Servidor rodando na porta ${PORT}`);
-});
-
-
-// ✅ Middleware express padrão
-app.use(express.json());
-
-// ✅ Rotas principais
-app.get("/", (req, res) => {
-  res.json({ message: "Servidor LearnPlay rodando ✅" });
-});
-
+// ✅ Rotas
 app.use("/quiz", quizRoutes);
 
 // ✅ Porta dinâmica do Render
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
+
